@@ -30,6 +30,6 @@ sonarqube {
     properties {
         property 'sonar.host.url', 'http://44.204.122.23:9000'
         property 'sonar.login', 'admin'
-		property 'sonar.login', 'eapenm'
+		property 'sonar.password', 'eapenm'
     }
 }
