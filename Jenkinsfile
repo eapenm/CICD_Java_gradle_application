@@ -35,7 +35,7 @@ pipeline{
                     docker login -u admin -p $nexus_pass 44.197.240.117:8083
                     docker push 44.197.240.117:8083/springapp:${VERSION}
                     docker rmi 44.197.240.117:8083/springapp:${VERSION}
-                 }   '''
+                    '''
                 }
             }
         }
