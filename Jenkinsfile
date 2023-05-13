@@ -12,7 +12,7 @@ pipeline{
                     withSonarQubeEnv(credentialsId: 'sonar-token') {
                       sh 'chmod 777 gradlew'
                       sh './gradlew --status'
-                      sh './gradlew sonarqube --stacktrace'
+                      sh './gradlew sonarqube --stacktrace --scan'
                     }
                     
                 }
