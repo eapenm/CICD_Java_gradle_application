@@ -32,6 +32,7 @@ pipeline{
                 script{
                     withCredentials([string(credentialsId: 'nexus_pass', variable: 'nexus_pass')]) {
                     sh '''
+                    chmod 777 /var/run/docker.sock
                     docker build -t 3.239.228.172:8083/springapp:${VERSION} .
                     docker login -u admin -p $nexus_pass 3.239.228.172:8083
                     docker push 3.239.228.172:8083/springapp:${VERSION}
