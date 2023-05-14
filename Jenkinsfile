@@ -70,18 +70,30 @@ pipeline{
             }
         }
         }
-        stage('Deploying application to K8 Cluster') {
+        stage('Deploying application on k8s cluster') {
             steps {
-                script{
+               script{
                    withCredentials([kubeconfigFile(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                         dir('kubernetes/') {
-                          sh 'helm upgrade --install --set image.repository="3.239.228.172:8083/springapp" --set image.tag="${VERSION}" --set-string global.request-max-bytes=4145728 myjavaapp myapp/ ' 
+                        dir('kubernetes/') {
+                          sh 'helm upgrade --install --set image.repository="3.239.228.172:8083/springapp" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
                         }
-                }
+                    }
+               }
+            }
+        }
+
+        stage('verifying app deployment'){
+            steps{
+                script{
+                     withCredentials([kubeconfigFile(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                         sh 'kubectl run curl --image=curlimages/curl -i --rm --restart=Never -- curl myjavaapp-myapp:8080'
+
+                     }
                 }
             }
         }
     }
+    
 post {
 		always {
 			mail bcc: '', body: "<br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "${currentBuild.result} CI: Project name -> ${env.JOB_NAME}", to: "eapenmani@gmail.com";  
